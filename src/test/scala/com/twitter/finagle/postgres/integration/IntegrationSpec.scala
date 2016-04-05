@@ -61,7 +61,7 @@ class IntegrationSpec extends Spec {
         | str_field VARCHAR(40),
         | int_field INT,
         | double_field DOUBLE PRECISION,
-        | timestamp_field TIMESTAMP WITH TIME ZONE,
+        | timestamp_field TIMESTAMP,
         | bool_field BOOLEAN
         |)
       """.stripMargin.format(IntegrationSpec.pgTestTable))
@@ -74,10 +74,10 @@ class IntegrationSpec extends Spec {
     val insertDataQuery = client.executeUpdate(
       """
         |INSERT INTO %s VALUES
-        | ('hello', 1234, 10.5, '2015-01-08 11:55:12-0800', TRUE),
-        | ('hello', 5557, -4.51, '2015-01-08 12:55:12-0800', TRUE),
-        | ('hello', 7787, -42.51, '2013-12-24 07:01:00-0800', FALSE),
-        | ('goodbye', 4567, 15.8, '2015-01-09 16:55:12+0500', FALSE)
+        | ('hello', 1234, 10.5, timestamptz '2015-01-08 11:55:12-08:00', TRUE),
+        | ('hello', 5557, -4.51, timestamptz '2015-01-08 12:55:12-08:00', TRUE),
+        | ('hello', 7787, -42.51, timestamptz '2013-12-24 07:01:00-08:00', FALSE),
+        | ('goodbye', 4567, 15.8, timestamptz '2015-01-09 16:55:12+05:00', FALSE)
       """.stripMargin.format(IntegrationSpec.pgTestTable))
 
     val response = Await.result(insertDataQuery, queryTimeout)
