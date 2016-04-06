@@ -37,6 +37,10 @@ class IntegrationSpec extends Spec {
     sys.env.get("USE_PG_SSL") == Some("1")
   }
 
+  def clientCertAndPass: Option[(String, String)] = {
+    sys.env.get("PG_PKCS12").map(cert => (cert, sys.env.get("PG_PKCS12_PASS").getOrElse("")))
+  }
+
   val queryTimeout = Duration.fromSeconds(2)
 
   def getClient = {
@@ -45,7 +49,8 @@ class IntegrationSpec extends Spec {
       IntegrationSpec.pgUser,
       Some(IntegrationSpec.pgPassword),
       IntegrationSpec.pgDbName,
-      useSsl = useSsl
+      useSsl = useSsl,
+      clientCertAndPass = clientCertAndPass
     )
   }
 
